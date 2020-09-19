@@ -3,8 +3,15 @@ defmodule Sup.Worker do
 
   # Public API
 
-  def start_link({stash_pid, name}) do
-    GenServer.start_link(__MODULE__, stash_pid, name: name)
+  def start_link(name) do
+    agent_name = get_agent(name)
+    value = Sup.WorkerAgent.get(agent_name)
+    GenServer.start_link(__MODULE__, %{name: name, value: value}, name: name)
+  end
+
+  def get_agent(name) do
+    "agent_#{Atom.to_string(name)}"
+    |> String.to_atom()
   end
 
   def next_number(name) do
@@ -22,15 +29,15 @@ defmodule Sup.Worker do
     {:ok, args}
   end
 
-  def handle_call(:next_number, _from, current_number) do
-    {:reply, current_number, current_number + 1}
+  def handle_call(:next_number, _from, %{name: name, value: value}) do
+    {:reply, value, %{name: name, value: value + 1}}
   end
 
-  def handle_cast({:increment_number, delta}, current_number) do
-    {:noreply, current_number + delta}
+  def handle_cast({:increment_number, delta}, %{name: name, value: value}) do
+    {:noreply, %{name: name, value: value + delta}}
   end
 
-  # def terminate(_reason, current_number) do
-  #   Sup.WorkerAgent.update(current_number)
-  # end
+  def terminate(_reason, %{name: name, value: value}) do
+    Sup.WorkerAgent.update(get_agent(name), value)
+  end
 end

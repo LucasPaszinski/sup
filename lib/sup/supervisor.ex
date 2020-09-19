@@ -8,16 +8,13 @@ defmodule Sup.Supervisor do
 
   @impl true
   def init(_init_arg) do
-    IO.inspect(%{supervisor_id: self()})
-
     children = [
-      #Supervisor.child_spec({Sup.WorkerAgent, {0, :agent1}}, id: :agent1),
-      Supervisor.child_spec({Sup.Worker, {250, :worker1}}, id: :worker1),
-      #Supervisor.child_spec({Sup.WorkerAgent, {0, :agent2}}, id: :agent2),
-      Supervisor.child_spec({Sup.Worker, {300, :worker2}}, id: :worker2)
+      Supervisor.child_spec({Sup.WorkerAgent, {10, :agent_worker1}}, id: :agent_worker1),
+      Supervisor.child_spec({Sup.Worker, :worker1}, id: :worker1),
+      Supervisor.child_spec({Sup.WorkerAgent, {20, :agent_worker2}}, id: :agent_worker2),
+      Supervisor.child_spec({Sup.Worker, :worker2}, id: :worker2)
     ]
 
-    IO.inspect(%{children: children})
     Supervisor.init(children, strategy: :one_for_one)
   end
 end

@@ -1,16 +1,16 @@
-# defmodule Sup.WorkerAgent do
-#   use Agent
+defmodule Sup.WorkerAgent do
+  use Agent
 
-#   def start_link({initial_value, name}) do
+  def start_link({initial_value, name}) do
 
-#     Agent.start_link(fn -> initial_value end, name: name)
-#   end
+    Agent.start_link(fn -> initial_value end, name: name)
+  end
 
-#   def get(name) do
-#     Agent.get(name, & &1)
-#   end
+  def get(name) do
+    Agent.get(name, & &1)
+  end
 
-#   def update(name, new_value) do
-#     Agent.update(name, fn _state -> new_value end)
-#   end
-# end
+  def update(name, new_value) do
+    Agent.update(name, fn _state -> new_value end)
+  end
+end
