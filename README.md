@@ -1,6 +1,6 @@
 # Sup
 
-**TODO: Add description**
+A Repository to remember how to create an association of supervison between entities.
 
 ## Installation
 
